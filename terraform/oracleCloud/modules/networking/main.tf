@@ -157,7 +157,7 @@ resource "oci_core_subnet" "private_subnet" {
 
 resource "oci_core_security_list" "worker_security_list" {
   compartment_id = var.compartment_ocid
-  vcn_id         = var.vcn_id
+  vcn_id         = oci_core_virtual_network.vcn.id
   display_name   = "oke-worker-security-list"
 
   # =================================================================
