@@ -230,7 +230,8 @@ resource "oci_core_security_list" "worker_security_list" {
   # Missing Ingress: Control Plane Kubelet Management
   ingress_security_rules {
     protocol    = "6" # TCP
-    source      = oci_core_subnet.public_subnet.cidr_block    stateless   = false
+    source      = oci_core_subnet.public_subnet.cidr_block    
+    stateless   = false
     description = "OKE Control Plane to worker Kubelet/management ports"
 
     tcp_options {
@@ -242,7 +243,8 @@ resource "oci_core_security_list" "worker_security_list" {
   # Missing Ingress: Control Plane to Node Webhooks (All Ports)
   ingress_security_rules {
     protocol    = "6" # TCP
-    source      = oci_core_subnet.public_subnet.cidr_block    stateless   = false
+    source      = oci_core_subnet.public_subnet.cidr_block    
+    stateless   = false
     description = "Control plane to worker node webhook communication"
 
     tcp_options {
