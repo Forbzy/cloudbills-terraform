@@ -153,6 +153,10 @@ resource "oci_core_subnet" "private_subnet" {
   route_table_id = oci_core_route_table.private.id
 
   prohibit_public_ip_on_vnic = true
+
+  # CRITICAL FIX: Attach your custom security rules here
+  security_list_ids          = [oci_core_security_list.worker_security_list.id]
+
 }
 
 resource "oci_core_security_list" "worker_security_list" {
@@ -226,8 +230,7 @@ resource "oci_core_security_list" "worker_security_list" {
   # Missing Ingress: Control Plane Kubelet Management
   ingress_security_rules {
     protocol    = "6" # TCP
-    source      = var.control_plane_subnet_cidr # e.g., "10.0.0.0/28"
-    stateless   = false
+    source      = oci_core_subnet.public_subnet.cidr_block    stateless   = false
     description = "OKE Control Plane to worker Kubelet/management ports"
 
     tcp_options {
@@ -239,8 +242,7 @@ resource "oci_core_security_list" "worker_security_list" {
   # Missing Ingress: Control Plane to Node Webhooks (All Ports)
   ingress_security_rules {
     protocol    = "6" # TCP
-    source      = var.control_plane_subnet_cidr # e.g., "10.0.0.0/28"
-    stateless   = false
+    source      = oci_core_subnet.public_subnet.cidr_block    stateless   = false
     description = "Control plane to worker node webhook communication"
 
     tcp_options {
