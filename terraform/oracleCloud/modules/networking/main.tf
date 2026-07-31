@@ -154,3 +154,98 @@ resource "oci_core_subnet" "private_subnet" {
 
   prohibit_public_ip_on_vnic = true
 }
+
+resource "oci_core_security_list" "worker_security_list" {
+  compartment_id = var.compartment_id
+  vcn_id         = var.vcn_id
+  display_name   = "oke-worker-security-list"
+
+  # =================================================================
+  # 1. EXISTING RULES (From your screenshot)
+  # =================================================================
+
+  # Existing Ingress: SSH
+  ingress_security_rules {
+    protocol    = "6" # TCP
+    source      = "0.0.0.0/0"
+    stateless   = false
+    description = "TCP traffic for ports: 22 SSH Remote Login Protocol"
+
+    tcp_options {
+      min = 22
+      max = 22
+    }
+  }
+
+  # Existing Ingress: ICMP Type 3, 4
+  ingress_security_rules {
+    protocol    = "1" # ICMP
+    source      = "0.0.0.0/0"
+    stateless   = false
+    description = "ICMP traffic for: 3, 4 Destination Unreachable"
+
+    icmp_options {
+      type = 3
+      code = 4
+    }
+  }
+
+  # Existing Ingress: ICMP Type 3 (Internal VCN)
+  ingress_security_rules {
+    protocol    = "1" # ICMP
+    source      = "10.0.0.0/16"
+    stateless   = false
+    description = "ICMP traffic for: 3 Destination Unreachable"
+
+    icmp_options {
+      type = 3
+    }
+  }
+
+  # Existing Egress: All traffic allowed
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+    stateless   = false
+    description = "All traffic for all ports"
+  }
+
+
+  # =================================================================
+  # 2. MISSING RULES REQUIRED TO FIX REGISTRATION TIMEOUT
+  # =================================================================
+
+  # Missing Ingress: Internal Node-to-Node Communication
+  ingress_security_rules {
+    protocol    = "all"
+    source      = "10.0.0.0/16" # Your VCN CIDR block
+    stateless   = false
+    description = "Allow all protocols between worker nodes"
+  }
+
+  # Missing Ingress: Control Plane Kubelet Management
+  ingress_security_rules {
+    protocol    = "6" # TCP
+    source      = var.control_plane_subnet_cidr # e.g., "10.0.0.0/28"
+    stateless   = false
+    description = "OKE Control Plane to worker Kubelet/management ports"
+
+    tcp_options {
+      min = 10250
+      max = 10256
+    }
+  }
+
+  # Missing Ingress: Control Plane to Node Webhooks (All Ports)
+  ingress_security_rules {
+    protocol    = "6" # TCP
+    source      = var.control_plane_subnet_cidr # e.g., "10.0.0.0/28"
+    stateless   = false
+    description = "Control plane to worker node webhook communication"
+
+    tcp_options {
+      min = 1025
+      max = 65535
+    }
+  }
+}
