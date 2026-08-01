@@ -208,3 +208,12 @@ resource "oci_core_security_list" "worker_security_list" {
     }
   }
 }
+
+resource "oci_bastion_bastion" "flux_bastion" {
+  bastion_type                 = "STANDARD"
+  compartment_id               = var.compartment_ocid
+  target_subnet_id             = oci_core_subnet.public_subnet.id
+  client_cidr_block_allow_list = ["0.0.0.0/0"] # For production, restrict this to your public IP
+  name                         = "flux-bootstrap-bastion"
+  max_session_ttl_in_seconds   = 10800
+}
