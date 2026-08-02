@@ -207,6 +207,18 @@ resource "oci_core_security_list" "worker_security_list" {
       max = 65535
     }
   }
+  # Ingress: Allow Bastion/Public Subnet to reach Kubernetes API Endpoint
+  ingress_security_rules {
+    protocol    = "6" # TCP
+    source      = "10.0.1.0/24" # Your Public Subnet CIDR block
+    stateless   = false
+    description = "Allow OCI Bastion to communicate with Kubernetes API Server"
+
+    tcp_options {
+      min = 6443
+      max = 6443
+    }
+  }
 }
 
 resource "oci_bastion_bastion" "flux_bastion" {

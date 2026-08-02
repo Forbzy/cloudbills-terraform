@@ -125,7 +125,6 @@ jobs:
         env:
           TF_VAR_compartment_ocid: ${{ secrets.OCI_COMPARTMENT_OCID }}
           TF_VAR_region: ${{ secrets.OCI_REGION }}
-          TF_LOG: DEBUG
 
       - name: Get cluster ID
         id: cluster
