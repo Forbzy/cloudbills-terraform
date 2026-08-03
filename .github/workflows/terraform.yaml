@@ -3,13 +3,13 @@ name: Terraform
 on:
   pull_request:
     paths:
-      - "terraform/**"
+      - "infrastructure/**"
 
   push:
     branches:
       - main
     paths:
-      - "terraform/**"
+      - "infrastructure/**"
 
 permissions:
   contents: read
