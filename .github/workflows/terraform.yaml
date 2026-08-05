@@ -134,7 +134,7 @@ jobs:
           echo "cluster_id=$(terraform output -raw cluster_id)" >> $GITHUB_OUTPUT
 
   fluxcd-bootstrap:
-    name: FluxCD Bootstrap (Cluster Setup)
+    name: FluxCD Bootstrap
     needs: apply
     runs-on: ubuntu-latest
     environment: develop
@@ -147,8 +147,12 @@ jobs:
 
       - name: Install OCI CLI
         run: |
+          # 1. Download and run the automated installer natively
           bash -c "$(curl -L https://githubusercontent.com)" -- \
             --accept-all-defaults
+            
+          # 2. FIX: Force-inject the newly compiled path straight into the GitHub Actions system path array
+          echo "/home/runner/bin" >> $GITHUB_PATH
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
