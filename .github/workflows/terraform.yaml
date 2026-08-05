@@ -147,9 +147,8 @@ jobs:
 
       - name: Install OCI CLI Natively
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-oci-cli
-          
+          sudo pipx install oci-cli
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
 
