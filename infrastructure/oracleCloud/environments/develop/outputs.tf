@@ -12,8 +12,7 @@ output "vcn_id" {
 }
 
 output "cluster_private_ip" {
-  # Strips the ":6443" port suffix from the OKE cluster endpoint string
-  value       = split(":", module.oke.cluster_endpoint)[0]
+  value       = split(":", module.oke.cluster_endpoint["private-endpoint"])[0]
   description = "The raw private IP of the Kubernetes API master endpoint."
 }
 
