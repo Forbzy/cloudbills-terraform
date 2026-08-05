@@ -145,15 +145,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install OCI CLI
+      - name: Install OCI CLI Natively
         run: |
-          # 1. Download and run the automated installer natively
-          bash -c "$(curl -L https://githubusercontent.com)" -- \
-            --accept-all-defaults
-
-          # 2. FIX: Force-inject the newly compiled path straight into the GitHub Actions system path array
-          echo "/home/runner/bin" >> $GITHUB_PATH
-
+          sudo apt-get update
+          sudo apt-get install -y python3-oci-cli
+          
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
 
