@@ -149,7 +149,7 @@ jobs:
         run: |
           bash -c "$(curl -L https://githubusercontent.com)" -- \
             --accept-all-defaults
-            
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
 
