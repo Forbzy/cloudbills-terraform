@@ -38,7 +38,7 @@ provider "flux" {
     config_path = "~/.kube/config"
   }
   git = {
-    url = "https://github.com" # Targets your target separate repo
+    url = "https://github.com/Forbzy/cloudbills-fluxcd.git" # Targets your target separate repo
     http = {
       username = "Forbzy"
       password = var.github_token
