@@ -150,7 +150,7 @@ jobs:
           # 1. Download and run the automated installer natively
           bash -c "$(curl -L https://githubusercontent.com)" -- \
             --accept-all-defaults
-            
+
           # 2. FIX: Force-inject the newly compiled path straight into the GitHub Actions system path array
           echo "/home/runner/bin" >> $GITHUB_PATH
 
