@@ -8,9 +8,9 @@ resource "tls_private_key" "flux_deploy_key" {
 resource "github_repository_deploy_key" "flux" {
   provider   = github
   title      = "flux-oke-deploy-key"
-  repository = "cloudbills-fluxcd"                       # Your separate Flux repo name
+  repository = "cloudbills-fluxcd"
   key        = tls_private_key.flux_deploy_key.public_key_openssh
-  read_only  = "false"                                    # Allows Flux to write sync data
+  read_only  = "false"
 }
 
 # 3. Bootstrap FluxCD (Runs exactly once when the OKE cluster is ready)
