@@ -19,3 +19,9 @@ variable "control_plane_subnet_cidr" {
   default     = "10.0.0.0/28"
   description = "The CIDR block of the OKE control plane subnet"
 }
+
+variable "github_token" {
+  description = "GitHub Personal Access Token"
+  type        = string
+  sensitive   = true
+}
