@@ -12,7 +12,3 @@ output "public_subnet_id" {
   description = "Public subnet OCID"
   value       = oci_core_subnet.public_subnet.id
 }
-
-output "bastion_id" {
-  value = module.networking.bastion_id
-}
