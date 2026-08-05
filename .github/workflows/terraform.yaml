@@ -173,7 +173,11 @@ jobs:
 
       # STAGE 2: Dynamically grab values straight from the freshly created state file 
       - name: Open Dynamic Secure OCI Bastion Tunnel
-        run: |
+        run:  |
+          # 1. Hides the Oracle signing key formatting message
+          export SUPPRESS_LABEL_WARNING=True
+
+          # 2. Fetch the dynamic tracking outputs
           CLUSTER_PRIVATE_IP=$(terraform output -raw cluster_private_ip)
           BASTION_OCID=$(terraform output -raw bastion_id)
           
@@ -181,16 +185,18 @@ jobs:
           
           ssh-keygen -t ed25519 -N "" -f ./id_bastion
           
+          # 3. FIXED: Corrected the --key-details argument mapping block to match OCI syntax guidelines
           SESSION_OCID=$(oci bastion session create-port-forwarding \
-            --bastion-id $BASTION_OCID \
+            --bastion-id "$BASTION_OCID" \
             --display-name "pipeline-dynamic-session" \
-            --key-details '{"publicKeyContent": "'"$(cat ./id_bastion.pub)"'"}' \
-            --target-private-ip-id "$CLUSTER_PRIVATE_IP" \
+            --ssh-public-key-file ./id_bastion.pub \
+            --target-private-ip "$CLUSTER_PRIVATE_IP" \
             --target-port 6443 \
             --query "data.id" --raw-output)
           
           sleep 15
           
+          # 4. Establish the background connection bridge forwarder 
           ssh -i ./id_bastion -o StrictHostKeyChecking=no -N -L 6443:${CLUSTER_PRIVATE_IP}:6443 -p 22 \
             $SESSION_OCID@host.bastion.${{ secrets.OCI_REGION }}.oci.oraclecloud.com &
           
