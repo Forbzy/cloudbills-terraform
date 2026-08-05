@@ -26,3 +26,9 @@ variable "node_count" {
 variable "region" {
   type = string
 }
+
+variable "github_token" {
+  description = "GitHub Personal Access Token"
+  type        = string
+  sensitive   = true
+}
