@@ -33,17 +33,9 @@ module "oke" {
 }
 
 module "loadbalancer" {
-
   source = "../../modules/loadbalancer"
-
   compartment_ocid = var.compartment_ocid
-
   public_subnet_id = module.networking.public_subnet_id
-
   private_subnet_id = module.networking.private_subnet_id
-
   tags = local.tags
 }
-
-
-
