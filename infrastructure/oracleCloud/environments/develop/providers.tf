@@ -34,7 +34,6 @@ provider "github" {
 
 provider "flux" {
   kubernetes = {
-    host        = "https://127.0.0.1:6443"
     config_path = "~/.kube/config"
   }
   git = {
