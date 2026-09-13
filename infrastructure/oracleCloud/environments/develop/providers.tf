@@ -29,7 +29,6 @@ provider "oci" {
 
 provider "github" {
   token = var.github_token # Needs write access to your cloudbills-fluxcd repo
-  #owner = "Forbzy"
 }
 
 provider "flux" {
