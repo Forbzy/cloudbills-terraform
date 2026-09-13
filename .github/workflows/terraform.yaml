@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: Configure OCI CLI
         run: |
@@ -99,7 +99,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: Configure OCI CLI
         run: |
@@ -150,7 +150,7 @@ jobs:
           sudo pipx install oci-cli
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       # Fix: The OCI CLI must be explicitly re-configured for this separate runner agent
       # because it needs to generate your dynamic session tokens
