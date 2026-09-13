@@ -40,7 +40,7 @@ resource "oci_containerengine_node_pool" "workers" {
 
   compartment_id = var.compartment_ocid
 
-  kubernetes_version = var.kubernetes_version
+  #kubernetes_version = var.kubernetes_version
 
   name = "${var.cluster_name}-workers"
 
