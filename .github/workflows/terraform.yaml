@@ -224,7 +224,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.FLUX_GITHUB_TOKEN }}
         run: |
-          flux bootstrap git \
-            --url=https://github.com/Forbzy/cloudbills-fluxcd \
+          flux bootstrap github \
+            --token-auth \
+            --owner=Forbzy \
+            --repository=cloudbills-fluxcd \
             --branch=main \
-            --path=gitops/clusters/develop
+            --path=gitops/clusters/develop \
+            --personal
