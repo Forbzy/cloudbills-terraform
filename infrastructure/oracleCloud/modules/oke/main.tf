@@ -40,7 +40,7 @@ resource "oci_containerengine_node_pool" "workers" {
 
   compartment_id = var.compartment_ocid
 
-  kubernetes_version = var.kubernetes_version
+  #kubernetes_version = var.kubernetes_version
 
   name = "${var.cluster_name}-workers"
 
@@ -66,7 +66,7 @@ resource "oci_containerengine_node_pool" "workers" {
   }
 
   node_source_details {
-    image_id                = "ocid1.image.oc1.uk-london-1.aaaaaaaaixdnqyiz7ivji5wrninhm4xfsnydkdr6arjkx6osjkn6byhh75ka"
+    image_id                = "ocid1.image.oc1.uk-london-1.aaaaaaaam4t6qduva2tnxt6ynqmvyjsr3j32vh24dlmi6nc356qbokirl3oa"
     source_type             = "IMAGE"
     boot_volume_size_in_gbs = 50
   }

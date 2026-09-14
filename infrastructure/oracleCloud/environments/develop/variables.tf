@@ -8,7 +8,7 @@ variable "cluster_name" {
 }
 
 variable "kubernetes_version" {
-  default = "v1.33.1"
+  default = "v1.36.1"
 }
 
 variable "node_shape" {
