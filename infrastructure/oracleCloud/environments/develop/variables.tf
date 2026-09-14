@@ -20,7 +20,7 @@ variable "node_shape" {
 variable "node_count" {
   description = "Number of worker nodes"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "region" {
