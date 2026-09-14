@@ -9,28 +9,35 @@ resource "oci_containerengine_cluster" "oke_cluster" {
   vcn_id = var.vcn_id
 
   endpoint_config {
+    
     is_public_ip_enabled = true
+
     subnet_id            = var.public_subnet_id
   }
 
 }
 
 data "oci_containerengine_cluster_kube_config" "oke" {
+
   cluster_id = oci_containerengine_cluster.oke_cluster.id
 
   token_version = "2.0.0"
 }
 
 data "oci_containerengine_cluster" "oke" {
+
   cluster_id = oci_containerengine_cluster.oke_cluster.id
 }
 
 data "oci_identity_availability_domains" "ads" {
+
   compartment_id = var.compartment_ocid
 }
 
 data "oci_containerengine_node_pool_option" "options" {
+
   node_pool_option_id = "all"
+  
   compartment_id      = var.compartment_ocid
 }
 
@@ -40,7 +47,7 @@ resource "oci_containerengine_node_pool" "workers" {
 
   compartment_id = var.compartment_ocid
 
-  #kubernetes_version = var.kubernetes_version
+  kubernetes_version = var.kubernetes_version
 
   name = "${var.cluster_name}-workers"
 
@@ -66,8 +73,11 @@ resource "oci_containerengine_node_pool" "workers" {
   }
 
   node_source_details {
-    image_id                = "ocid1.image.oc1.uk-london-1.aaaaaaaam4t6qduva2tnxt6ynqmvyjsr3j32vh24dlmi6nc356qbokirl3oa"
+
+    image_id                = "ocid1.image.oc1.uk-london-1.aaaaaaaa63ecaxw5iq5w4w5d2osmospbaq2wxnosgwsssew34cuzp4x2booq"
+
     source_type             = "IMAGE"
+
     boot_volume_size_in_gbs = 50
   }
 }
