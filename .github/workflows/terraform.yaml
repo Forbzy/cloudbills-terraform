@@ -152,6 +152,9 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v4
 
+      - name: Install Flux CLI
+        uses: fluxcd/flux2/action@main
+
       # Fix: The OCI CLI must be explicitly re-configured for this separate runner agent
       # because it needs to generate your dynamic session tokens
       - name: Configure OCI CLI
@@ -169,7 +172,7 @@ jobs:
           EOF
 
       - name: Terraform Init
-        run: terraform init -reconfigure
+        run: terraform init
 
       - name: Create kubeconfig
         run: |
@@ -212,13 +215,12 @@ jobs:
           
           sleep 5
 
-      # STAGE 3: Final execution. Safely hooks FluxCD over the active tunnel
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Bootstrap FluxCD
         env:
-          TF_VAR_compartment_ocid: ${{ secrets.OCI_COMPARTMENT_OCID }}
-          TF_VAR_region: ${{ secrets.OCI_REGION }}
-          TF_VAR_use_tunnel: "true"
-          TF_VAR_github_token: ${{ secrets.FLUX_GITHUB_TOKEN }}
-          TF_VAR_github_org_or_username: "Forbzy"
-          TF_VAR_github_repository_name: "cloudbills-fluxcd"
+          GITHUB_TOKEN: ${{ secrets.FLUX_GITHUB_TOKEN }}
+        run: |
+          flux bootstrap git \
+            --url=https://github.com/Forbzy/cloudbills-fluxcd \
+            --branch=main \
+            --path=gitops/clusters/develop \
+            --token-auth
