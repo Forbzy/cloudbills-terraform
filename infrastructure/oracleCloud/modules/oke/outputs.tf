@@ -5,11 +5,15 @@ output "cluster_id" {
 
 output "kubeconfig" {
   description = "OKE kubeconfig"
-
-  value = data.oci_containerengine_cluster_kube_config.oke.content
+  value       = data.oci_containerengine_cluster_kube_config.oke.content
 }
 
 output "cluster_endpoint" {
   description = "OKE Kubernetes API endpoint"
   value       = data.oci_containerengine_cluster.oke.endpoints[0]
+}
+
+output "node_pool_id" {
+  description = "The core OCID of the OKE worker node pool resource block"
+  value       = oci_containerengine_node_pool.workers.id
 }
