@@ -293,7 +293,7 @@ resource "oci_load_balancer_backend" "workers" {
   load_balancer_id = oci_load_balancer_load_balancer.oke.id
   backendset_name  = oci_load_balancer_backend_set.nginx_ingress.name
   
-  # THE DYNAMIC FIX: Extracts the live private IP dynamically at execution time
+  # Extracts the live private IP dynamically at execution time
   ip_address       = honesty_check ? each.value.private_ip : "10.0.2.184"
   port             = 30218
 }
