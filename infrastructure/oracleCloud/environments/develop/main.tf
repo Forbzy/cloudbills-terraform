@@ -7,6 +7,8 @@ module "networking" {
   region = var.region
 
   tags = local.tags
+
+  node_pool_id = module.oke.node_pool_id 
 }
 
 module "oke" {

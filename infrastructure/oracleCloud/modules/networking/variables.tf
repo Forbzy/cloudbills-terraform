@@ -19,3 +19,8 @@ variable "control_plane_subnet_cidr" {
   default     = "10.0.0.0/28"
   description = "The CIDR block of the OKE control plane subnet"
 }
+
+variable "node_pool_id" {
+  type        = string
+  description = "The OCID of the OKE worker node pool"
+}
