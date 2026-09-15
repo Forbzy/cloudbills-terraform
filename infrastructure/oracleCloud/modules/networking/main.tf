@@ -229,3 +229,13 @@ resource "oci_bastion_bastion" "flux_bastion" {
   name                         = "flux-bootstrap-bastion"
   max_session_ttl_in_seconds   = 10800
 }
+
+resource "oci_load_balancer_load_balancer" "oke" {
+  compartment_id = var.compartment_ocid
+  display_name   = "cloudbills-oke-lb"
+  shape          = "10Mbps-Micro" 
+  subnet_ids = [
+    module.networking.public_subnet_id
+  ]
+  is_private = false
+}
