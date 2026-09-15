@@ -229,3 +229,22 @@ resource "oci_bastion_bastion" "flux_bastion" {
   name                         = "flux-bootstrap-bastion"
   max_session_ttl_in_seconds   = 10800
 }
+
+resource "oci_load_balancer_load_balancer" "oke" {
+  compartment_id = var.compartment_ocid
+  display_name   = "cloudbills-oke-lb"
+
+  # 🟢 THE FIX: You must use this exact string for the Always Free Tier.
+  # Do NOT use "flexible".
+  shape          = "10Mbps-Micro" 
+
+  # 🟢 THE FIX: Remove the shape_details block entirely. 
+  # Micro shapes do not support flexible bandwidth configuration limits.
+
+  # Your existing public subnet
+  subnet_ids = [
+    module.networking.public_subnet_id
+  ]
+
+  is_private = false
+}
