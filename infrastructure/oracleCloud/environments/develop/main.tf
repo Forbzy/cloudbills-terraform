@@ -8,7 +8,7 @@ module "networking" {
 
   tags = local.tags
 
-  node_pool_id = module.oke.node_pool_id 
+  node_pool_id = module.oke.node_pool_id
 }
 
 module "oke" {

@@ -253,7 +253,7 @@ resource "oci_load_balancer_load_balancer" "oke" {
   ]
 }
 
-# 1. Create the Backend Set (The Pool)
+# Create the Backend Set (The Pool)
 resource "oci_load_balancer_backend_set" "nginx_ingress" {
   load_balancer_id = oci_load_balancer_load_balancer.oke.id
   name             = "nginx-ingress-backend-set"
@@ -271,7 +271,7 @@ resource "oci_load_balancer_backend_set" "nginx_ingress" {
   }
 }
 
-# 3. Create the Public Listener (The Front Door)
+# Create the Public Listener (The Front Door)
 resource "oci_load_balancer_listener" "http" {
   load_balancer_id         = oci_load_balancer_load_balancer.oke.id
   name                     = "http-listener"
@@ -280,19 +280,19 @@ resource "oci_load_balancer_listener" "http" {
   protocol                 = "HTTP"
 }
 
-# 1. Dynamically read the active node pool infrastructure details from the OCI API
+# Dynamically read the active node pool infrastructure details from the OCI API
 data "oci_containerengine_node_pool" "workers" {
   node_pool_id = var.node_pool_id
 }
 
-# 2. Dynamically loop through the live worker nodes using a for_each map
+# Dynamically loop through the live worker nodes using a for_each map
 resource "oci_load_balancer_backend" "workers" {
   # Creates a backend entry dynamically for every live node in the pool array
   for_each = { for node in data.oci_containerengine_node_pool.workers.nodes : node.id => node }
 
   load_balancer_id = oci_load_balancer_load_balancer.oke.id
   backendset_name  = oci_load_balancer_backend_set.nginx_ingress.name
-  
+
   # Extracts the live private IP dynamically at execution time
   ip_address       = honesty_check ? each.value.private_ip : "10.0.2.184"
   port             = 30218
