@@ -246,27 +246,27 @@ resource "oci_load_balancer_backend_set" "nginx_ingress" {
   name             = "nginx-ingress-backend-set"
   policy           = "ROUND_ROBIN"
 
-  #THE HEALTH CHECKER: This satisfies the "Incomplete" status block
   health_checker {
-    protocol            = "HTTP"
-    port                = 30218 # ⚠️ Nodes use custom high ports for Ingress (NodePort)
-    url_path            = "/healthz"
-    interval_in_ms      = 10000
-    timeout_in_ms       = 3000
-    retries             = 3
-    return_code         = 200
+    protocol     = "HTTP"
+    port         = 30218
+    url_path     = "/healthz"
+    retries      = 3
+    return_code  = 200
+    
+    #FIX 1: Corrected naming argument (removed "_in_ms")
+    interval_ms  = 10000 
   }
 }
 
 # 2. Attach Your OKE Worker Nodes to the Backend Pool
-# Repeat this block or use count/for_each if you have a dynamic worker list array
 resource "oci_load_balancer_backend" "worker_node_0" {
   load_balancer_id = oci_load_balancer_load_balancer.oke.id
-  backend_set_name = oci_load_balancer_backend_set.nginx_ingress.name
   
-  #Replace this with your actual private OKE worker node IP variable or output mapping reference
+  #FIX 2: Fixed property layout name to match provider spec (removed underscore)
+  backendset_name  = oci_load_balancer_backend_set.nginx_ingress.name
+  
   ip_address       = "10.0.1.44" 
-  port             = 30218 # Matches the custom high port exposed by your NodePort service
+  port             = 30218
 }
 
 # 3. Create the Public Listener (The Front Door)
