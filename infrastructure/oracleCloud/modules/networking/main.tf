@@ -231,11 +231,11 @@ resource "oci_bastion_bastion" "flux_bastion" {
 }
 
 resource "oci_load_balancer_load_balancer" "oke" {
-  compartment_id = var.compartment_ocid
+  compartment_id = var.compartment_id
   display_name   = "cloudbills-oke-lb"
-  shape          = "10Mbps-Micro" 
+  shape          = "10Mbps-Micro"
+  is_private     = false
   subnet_ids = [
-    module.networking.public_subnet_id
+    oci_core_subnet.public_subnet.id 
   ]
-  is_private = false
 }
