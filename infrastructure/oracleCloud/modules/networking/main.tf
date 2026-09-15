@@ -280,20 +280,19 @@ resource "oci_load_balancer_listener" "http" {
   protocol                 = "HTTP"
 }
 
-# Dynamically read the active node pool infrastructure details from the OCI API
+# Dynamically read the active node pool records from the OCI API at runtime
 data "oci_containerengine_node_pool" "workers" {
   node_pool_id = var.node_pool_id
 }
 
-# Dynamically loop through the live worker nodes using a for_each map
+# Dynamically attach the live worker nodes using a for_each map loop
 resource "oci_load_balancer_backend" "workers" {
-  # Creates a backend entry dynamically for every live node in the pool array
   for_each = { for node in data.oci_containerengine_node_pool.workers.nodes : node.id => node }
 
   load_balancer_id = oci_load_balancer_load_balancer.oke.id
   backendset_name  = oci_load_balancer_backend_set.nginx_ingress.name
-
-  # Extracts the live private IP dynamically at execution time
-  ip_address       = honesty_check ? each.value.private_ip : "10.0.2.184"
+  
+  # Map directly to the dynamic private IP variable string
+  ip_address       = each.value.private_ip 
   port             = 30218
 }
