@@ -231,7 +231,7 @@ resource "oci_bastion_bastion" "flux_bastion" {
 }
 
 resource "oci_load_balancer_load_balancer" "oke" {
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   display_name   = "cloudbills-oke-lb"
   shape          = "10Mbps-Micro"
   is_private     = false
