@@ -166,6 +166,19 @@ resource "oci_core_security_list" "worker_security_list" {
     }
   }
 
+  # Allows the Public Load Balancer to talk to your nodes
+  ingress_security_rules {
+    protocol    = "6" # TCP
+    source      = "10.0.0.0/16" #Allows your VCN's entire internal subnet range
+    source_type = "CIDR_BLOCK"
+    
+    tcp_options {
+      min = 30218
+      max = 30218
+    }
+    description = "Allow free load balancer health checks to reach ingress-nginx"
+  }
+
   # Existing Egress: All traffic allowed
   egress_security_rules {
     protocol    = "all"
